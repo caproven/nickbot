@@ -18,7 +18,6 @@ async def hello(ctx: commands.Context):
     await ctx.send('Hello!')
 
 @bot.command(name='changenick', help='Change someone\'s nickname')
-@commands.has_role('admin')
 @commands.has_guild_permissions(administrator=True)
 async def changenick(ctx: commands.Context, member: discord.Member, nickname: str):
     print(f'Changing {member} nickname to {nickname}')
