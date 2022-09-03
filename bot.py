@@ -1,26 +1,33 @@
 import os
 
 import discord
+from discord import app_commands
 from discord.ext import commands
 
-TOKEN = os.getenv('DISCORD_TOKEN')
+TOKEN = os.getenv("DISCORD_TOKEN")
 if not TOKEN:
-    raise Exception('DISCORD_TOKEN not found')
+    raise Exception("env var DISCORD_TOKEN not found")
 
-bot = commands.Bot(command_prefix='!', case_insensitive=True)
+class Nickbot(discord.Client):
+    def __init__(self):
+        super().__init__(intents=discord.Intents.default())
+        self.synced = False
 
-@bot.event
-async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
+    async def on_ready(self):
+        await bot.wait_until_ready()
+        if not self.synced:
+            await tree.sync()
+            self.synced = True
+        print(f"{self.user} has connected to Discord")
 
-@bot.command(name='hello', help='Says hello')
-async def hello(ctx: commands.Context):
-    await ctx.send('Hello!')
+bot = Nickbot()
+tree = app_commands.CommandTree(bot)
 
-@bot.command(name='changenick', help='Change someone\'s nickname')
+@tree.command(name="changenick", description="change someone's nickname")
 @commands.has_guild_permissions(administrator=True)
-async def changenick(ctx: commands.Context, member: discord.Member, nickname: str):
-    print(f'Changing {member} nickname to {nickname}')
-    await member.edit(nick=nickname)
+async def changenick(interaction: discord.Interaction, user: discord.Member, nickname: str):
+    old = user.display_name
+    await user.edit(nick=nickname)
+    await interaction.response.send_message(f"Changed {user.name}'s nickname from [{old}] to [{nickname}]")
 
 bot.run(TOKEN)

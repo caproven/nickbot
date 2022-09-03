@@ -14,7 +14,7 @@ The workaround I found was to create a bot with higher privileges than everyone 
 
 ## How it works
 
-I've got *nickbot* setup as a bot which I've added to a discord server. Most of the magic takes place in that setup, but that is outside the scope of the bot script. I happen to run the bot on a Heroku.
+I've got *nickbot* setup as a bot which I've added to a discord server. Most of the magic takes place in that setup, but that is outside the scope of the bot script. I happen to run the bot on a Heroku dyno.
 
 The bot is given a higher role than any user in the discord server so it can change nicknames of anyone. Then, users (restricted to admins) can use a bot command in the chat which invokes the bot to change the nickname of a specified user.
 
